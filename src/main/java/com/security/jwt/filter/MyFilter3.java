@@ -27,8 +27,8 @@ public class MyFilter3 implements Filter { // javax.servlet의 Filter
             System.out.println("필터3");
 
             if (headerAuth.equals("moon")) {  // 토큰이 "moon"과 일치하면
-                chain.doFilter(req, res);  // 필터 체인으로 통과
-            } else {  // 토큰이 일치하지 않으면 필터 종료
+                chain.doFilter(req, res);  // 필터 체인으로 통과 => controller 접근
+            } else {  // 토큰이 일치하지 않으면 필터 종료 => controller 접근 불가
                 PrintWriter out = res.getWriter();
                 out.println("인증 안됨!");
             }
