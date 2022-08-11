@@ -20,6 +20,7 @@ public class User {
     private String password;
     private String roles;  // USER, ADMIN
 
+    // Enum을 사용하지 않고 ,로 구분해서 ROLE을 입력하고 그것을 파싱해서 사용
     public List<String> getRoleList() {
         if (this.roles.length() > 0) {
             return Arrays.asList(this.roles.split(","));  // ,로 유저 역할 구분
