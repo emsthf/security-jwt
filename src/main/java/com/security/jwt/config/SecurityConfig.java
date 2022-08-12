@@ -23,7 +23,7 @@
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-            http.addFilterBefore(new MyFilter3(), BasicAuthenticationFilter.class);
+//            http.addFilterBefore(new MyFilter3(), BasicAuthenticationFilter.class);
             return http
                     .csrf().disable()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // 세션을 사용하지 않겠다는 뜻
