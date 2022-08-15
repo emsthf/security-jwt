@@ -1,7 +1,9 @@
     package com.security.jwt.config;
 
+    import com.security.jwt.config.jwt.JwtAuthorizationFilter;
     import com.security.jwt.filter.MyFilter3;
     import com.security.jwt.config.jwt.JwtAuthenticationFilter;
+    import com.security.jwt.repository.UserRepository;
     import lombok.RequiredArgsConstructor;
     import org.springframework.context.annotation.Bean;
     import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,7 @@
 
         // DI를 위해 CorsConfig를 불러온다
         private final CorsConfig corsConfig ;
+        private final UserRepository userRepository;
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -62,7 +65,8 @@
                 AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
                 builder
                         .addFilter(corsConfig.corsFilter())  // 모든 요청이 이 필터를 타고 들어간다. 이렇게 되면 내 서버는 CORS 정책에서 벗어날 수 있다.(CORS 요청이 와도 다 허용이 됨)
-                        .addFilter(new JwtAuthenticationFilter(authenticationManager));  // UsernamePasswordAuthenticationFilter를 상속한 이 필터에 꼭 필요한 파라미터 AuthenticationManager
+                        .addFilter(new JwtAuthenticationFilter(authenticationManager))  // UsernamePasswordAuthenticationFilter를 상속한 이 필터에 꼭 필요한 파라미터 AuthenticationManager
+                        .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository));
             }
         }
     }

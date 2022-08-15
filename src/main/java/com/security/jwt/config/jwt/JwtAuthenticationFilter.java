@@ -77,13 +77,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // 아래 방식은 RSA 방식이 아닌 사용 빈도가 더 높은 Hash 암호방식. HMAC256 방식의 특징이 서버만 알고 있는 SECRET 키 이다.
         String jwtToken = JWT.create()
                 .withSubject("jwt study 토큰")  // 토큰의 이름
-                .withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 10)))  // 토큰의 만료 시간. 10분으로 설정
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))  // 토큰의 만료 시간. 10분으로 설정
                 .withClaim("id", principalDetails.getUser().getId())  // 비공개 클레임. 내가 넣고 싶은 값을 넣으면 됨.
                 .withClaim("username", principalDetails.getUser().getUsername())
-                .sign(Algorithm.HMAC256("Bianchi"));  // SECRET은 내 서버만 아는 고유한 값.
+                .sign(Algorithm.HMAC512(JwtProperties.SECRET));  // SECRET은 내 서버만 아는 고유한 값.
 
         // 클라이언트에 응답할 response 헤더에 키 값으로 Authorization, 벨류 값으로 "Bearer " + jwtToken을 담아서 보낸다.
         // 여기서 "Bearer "를 쓸때 꼭 주의할 점이 Bearer 뒤에 한 칸 공백을 넣어주는 것이다.
-        response.addHeader("Authorization", "Bearer " + jwtToken);
+        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
     }
 }
